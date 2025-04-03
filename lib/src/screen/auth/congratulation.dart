@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settee/src/constants/app_styles.dart';
-import 'package:settee/src/screen/premium/index.dart';
+import 'package:settee/src/screen/home/map.dart';
 
 class CongratulationScreen extends StatefulWidget {
   const CongratulationScreen({super.key});
@@ -10,14 +10,17 @@ class CongratulationScreen extends StatefulWidget {
 }
 
 class _CongratulationScreenState extends State<CongratulationScreen> {
+
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 3));
       Navigator.push(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
-          builder: (context) => const PremiumScreen(),
+          builder: (context) => MapScreen(),
         ),
       );
     });
