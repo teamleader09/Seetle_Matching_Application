@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:settee/src/common/currentPosition.dart';
 import 'package:settee/src/common/profileBottomSheet.dart';
 import 'package:settee/src/common/whooSettingModalSheet.dart';
+import 'package:settee/src/common/addFriendBottomSheet.dart';
 import 'package:settee/src/translate/jp.dart';
 import 'package:settee/src/utils/index.dart';
 import 'package:geocoding/geocoding.dart';
@@ -18,7 +19,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   GoogleMapController? mapController;
-  LatLng _currentLocation = const LatLng(35.682839, 139.759455); 
+  LatLng _currentLocation = const LatLng(35.682839, 139.759455);
   String _locationName = loading;
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _getAddressFromCoordinates() async {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(
-        _currentLocation.latitude, _currentLocation.longitude);
+          _currentLocation.latitude, _currentLocation.longitude);
       if (placemarks.isNotEmpty) {
         setState(() {
           _locationName = '${placemarks[0].locality}, ${placemarks[0].country}';
@@ -54,7 +55,8 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _getCurrentLocation() async {
     // ignore: deprecated_member_use
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _currentLocation = LatLng(position.latitude, position.longitude);
     });
@@ -80,7 +82,7 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-  void _showBottomSheet(BuildContext context) {
+  void _showProfileBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -89,13 +91,12 @@ class _MapScreenState extends State<MapScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       builder: (BuildContext context) {
-        return const ProfileBottomSheet(
-        );
+        return const ProfileBottomSheet();
       },
     );
   }
 
-    void _showAddFriendBottomSheet(BuildContext context) {
+  void _showSettingBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -104,8 +105,21 @@ class _MapScreenState extends State<MapScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       builder: (BuildContext context) {
-        return WhooSettingsScreen(
-        );
+        return WhooSettingsScreen();
+      },
+    );
+  }
+
+  void _showAddFriendBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (BuildContext context) {
+        return const AddFriendBottomSheet();
       },
     );
   }
@@ -122,154 +136,153 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onWillPop,
+        onWillPop: _onWillPop,
         child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              padding: const EdgeInsets.all(0),
-              child: GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: _currentLocation,
-                  zoom: 20,
-                ),
-                onMapCreated: (GoogleMapController controller) {
-                  mapController = controller;
-                },
-                markers: {
-                  Marker(
-                    markerId: const MarkerId('current_location'),
-                    position: _currentLocation,
-                    infoWindow: const InfoWindow(title: "Your Location"),
-                    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+          body: Stack(
+            children: [
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                padding: const EdgeInsets.all(0),
+                child: GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: _currentLocation,
+                    zoom: 20,
                   ),
-                },
-              ),
-            ),
-            Positioned(
-              top: 50,
-              left: 10,
-              child: Text(
-                _locationName,
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  onMapCreated: (GoogleMapController controller) {
+                    mapController = controller;
+                  },
+                  markers: {
+                    Marker(
+                      markerId: const MarkerId('current_location'),
+                      position: _currentLocation,
+                      infoWindow: const InfoWindow(title: "Your Location"),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueAzure),
+                    ),
+                  },
                 ),
               ),
-            ),
-            Positioned(
-              top: 40,
-              right: 10,
-              child: Column(
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.person,
-                      size: 25,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      _showBottomSheet(context);
-                    },
+              Positioned(
+                top: 50,
+                left: 10,
+                child: Text(
+                  _locationName,
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.settings,
-                      size: 25,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      _showAddFriendBottomSheet(context);
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.group_add,
-                      size: 25,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      // Friends action
-                    },
-                  ),
-                ],
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 30,
-              left: vMin(context, 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
+              Positioned(
+                top: 40,
+                right: 10,
+                child: Column(
+                  children: [
+                    IconButton(
                       icon: const Icon(
-                        Icons.search,
+                        Icons.person,
                         size: 25,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       onPressed: () {
-                        // Search action
+                        _showProfileBottomSheet(context);
                       },
-                      padding: const EdgeInsets.all(0),
                     ),
-                  ),
-                  SizedBox(width: vMin(context, 10)),
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
+                    IconButton(
                       icon: const Icon(
-                        Icons.chat_bubble_outline,
+                        Icons.settings,
                         size: 25,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       onPressed: () {
-                        // Chat action
+                        _showSettingBottomSheet(context);
                       },
-                      padding: const EdgeInsets.all(0),
                     ),
-                  ),
-                  SizedBox(width: vMin(context, 10)),
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
+                    IconButton(
                       icon: const Icon(
-                        Icons.location_on,
+                        Icons.group_add,
                         size: 25,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                       onPressed: () {
-                        // Locate action
+                        _showAddFriendBottomSheet(context);
                       },
-                      padding: const EdgeInsets.all(0),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )
-
-          ],
-        ),
-      )
-    );
+              Positioned(
+                bottom: 30,
+                left: vMin(context, 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.search,
+                          size: 25,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          // Search action
+                        },
+                        padding: const EdgeInsets.all(0),
+                      ),
+                    ),
+                    SizedBox(width: vMin(context, 10)),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.chat_bubble_outline,
+                          size: 25,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          // Chat action
+                        },
+                        padding: const EdgeInsets.all(0),
+                      ),
+                    ),
+                    SizedBox(width: vMin(context, 10)),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.location_on,
+                          size: 25,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          // Locate action
+                        },
+                        padding: const EdgeInsets.all(0),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }

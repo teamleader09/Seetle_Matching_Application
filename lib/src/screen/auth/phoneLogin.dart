@@ -67,7 +67,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
             Center(
               child: Text(
                 inputNumberOrEmail.toString(),
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -129,10 +130,14 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                             controller: phoneController,
                             keyboardType: TextInputType.number,
                             onChanged: (_) => setState(() {}),
-                            inputFormatters: [LengthLimitingTextInputFormatter(11), FilteringTextInputFormatter.digitsOnly,],
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(11),
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                             decoration: const InputDecoration(
                               isCollapsed: true,
-                              contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 15),
                               hintText: phoneNumber,
                               border: InputBorder.none,
                             ),
@@ -156,32 +161,33 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Stack(
-                alignment: Alignment.centerRight,
-                children: [
-                  TextField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (_) => setState(() {}),
-                    decoration: InputDecoration(
-                      hintText: 'example@email.com',
-                      filled: true,
-                      isCollapsed: true,
-                      fillColor: kColorLightGray,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide.none,
+                  alignment: Alignment.centerRight,
+                  children: [
+                    TextField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (_) => setState(() {}),
+                      decoration: InputDecoration(
+                        hintText: 'example@email.com',
+                        filled: true,
+                        isCollapsed: true,
+                        fillColor: kColorLightGray,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 15),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                          borderSide: BorderSide.none,
+                        ),
                       ),
                     ),
-                  ),
-                  if (emailController.text.isNotEmpty)
-                    IconButton(
-                      icon: const Icon(Icons.highlight_remove),
-                      onPressed: _clearInput,
-                    ),
-                ],
+                    if (emailController.text.isNotEmpty)
+                      IconButton(
+                        icon: const Icon(Icons.highlight_remove),
+                        onPressed: _clearInput,
+                      ),
+                  ],
+                ),
               ),
-            ),
 
             SizedBox(height: vhh(context, 2)),
             GestureDetector(
@@ -206,11 +212,15 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Verifyscreen(
-                              dialCode: isPhoneSelected ? dialCode : null,
-                              phoneNumber: isPhoneSelected ? phoneController.text.trim() : null,
-                              email: isPhoneSelected ? null : emailController.text.trim(),
-                            )),
+                              builder: (context) => Verifyscreen(
+                                    dialCode: isPhoneSelected ? dialCode : null,
+                                    phoneNumber: isPhoneSelected
+                                        ? phoneController.text.trim()
+                                        : null,
+                                    email: isPhoneSelected
+                                        ? null
+                                        : emailController.text.trim(),
+                                  )),
                         );
                       }
                     : null,
@@ -225,10 +235,13 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       // ignore: deprecated_member_use
                       kColorMediumBlue.withOpacity(0.5),
                 ),
-                child: const Text(nextString, style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: kColorWhite,
-                ),),
+                child: const Text(
+                  nextString,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: kColorWhite,
+                  ),
+                ),
               ),
             ),
           ],

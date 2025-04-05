@@ -1,39 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:settee/src/translate/jp.dart';
+import 'package:settee/src/utils/index.dart';
+import 'package:settee/src/constants/app_styles.dart';
 
 class WhooSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInviteCard(),
-              const SizedBox(height: 24),
-              _buildMenuItem(Icons.person, "アカウント"),
-              _buildMenuItem(Icons.visibility_off, "ゴーストモード"),
-              _buildMenuItem(Icons.lock, "プライバシー設定"),
-              _buildMenuItem(Icons.info_outline, "whooについて"),
-              _buildMenuItem(Icons.help_outline, "よくある質問"),
-              _buildMenuItem(Icons.map, "マップオプション"),
-              _buildMenuItem(Icons.mail_outline, "ヘルプが必要ですか？"),
-              const SizedBox(height: 32),
-              Text(
-                'whooのアイコン',
-                style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              _buildIconsRow(),
-              const SizedBox(height: 8),
-              Text(
-                'whooを1日連続で開きましたね',
-                style: TextStyle(color: Colors.white70),
-              ),
-            ],
-          ),
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(
+            top: vhh(context, 5),
+            left: vMin(context, 3),
+            right: vMin(context, 3)),
+        height: vhh(context, 85),
+        decoration: const BoxDecoration(
+          color: kColorBlack,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildInviteCard(),
+            const SizedBox(height: 24),
+            _buildMenuItem(Icons.person, account),
+            _buildMenuItem(Icons.visibility_off, ghostMode),
+            _buildMenuItem(Icons.lock, privacySettings),
+            _buildMenuItem(Icons.info_outline, about),
+            _buildMenuItem(Icons.help_outline, question),
+            _buildMenuItem(Icons.map, mapOption),
+            _buildMenuItem(Icons.mail_outline, help),
+            const SizedBox(height: 32),
+            Text(
+              whoIcon,
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            _buildIconsRow(),
+            const SizedBox(height: 8),
+            Text(
+              whoOpenDoor,
+              style: TextStyle(color: Colors.white70),
+            ),
+          ],
         ),
       ),
     );
@@ -50,17 +58,20 @@ class WhooSettingsScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Icon(Icons.group, color: Colors.white),
-          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("さらに友達を追加する", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                Text("友達をwhooに招待してPOPSを増やそう", style: TextStyle(color: Colors.white70)),
+                Text("さらに友達を追加する",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+                Text("友達をwhooに招待してPOPSを増やそう",
+                    style: TextStyle(color: Colors.white70)),
               ],
             ),
           ),
+          const SizedBox(width: 12),
+          Icon(Icons.group, color: Colors.white),
         ],
       ),
     );
