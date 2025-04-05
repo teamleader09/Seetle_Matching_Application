@@ -1,3 +1,4 @@
+//start
 const String appName = "Setteeマッチングアプリ";
 const String tryItString = "お試ししてみる";
 const String notTryItString = "試さずスタート";
