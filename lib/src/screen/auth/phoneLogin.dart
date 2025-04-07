@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/services.dart';
-import 'package:settee/src/common/authHeader.dart';
-import 'package:settee/src/constants/app_styles.dart';
-import 'package:settee/src/screen/auth/verifyScreen.dart';
-import 'package:settee/src/translate/jp.dart';
-import 'package:settee/src/utils/index.dart';
+import 'package:seetle/src/common/authHeader.dart';
+import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/screen/auth/verifyScreen.dart';
+import 'package:seetle/src/translate/jp.dart';
+import 'package:seetle/src/utils/index.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
   const PhoneLoginScreen({super.key});

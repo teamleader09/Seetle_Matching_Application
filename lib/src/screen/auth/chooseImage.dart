@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:settee/src/constants/app_styles.dart';
-import 'package:settee/src/screen/auth/congratulation.dart';
-import 'package:settee/src/translate/jp.dart';
-import 'package:settee/src/utils/index.dart';
+import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/screen/auth/congratulation.dart';
+import 'package:seetle/src/translate/jp.dart';
+import 'package:seetle/src/utils/index.dart';
 
 class ChooseImageScreen extends StatefulWidget {
   const ChooseImageScreen({super.key});

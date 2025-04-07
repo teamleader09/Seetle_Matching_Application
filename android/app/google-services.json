@@ -1,47 +1,47 @@
 {
-    "project_info": {
-      "project_number": "414767726831",
-      "project_id": "salesbuddy-d03a4",
-      "storage_bucket": "salesbuddy-d03a4.appspot.com"
-    },
-    "client": [
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:414767726831:android:978f6d9e95ec3dfd211b1a",
-          "android_client_info": {
-            "package_name": "com.app.matching"
+  "project_info": {
+    "project_number": "522765746801",
+    "project_id": "settle-82c8e",
+    "storage_bucket": "settle-82c8e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522765746801:android:72dc0fbdfb86bb05ca11d0",
+        "android_client_info": {
+          "package_name": "com.app.seetle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522765746801-5u3c3gtiaas099v3o6ds2eiisec9nqis.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.seetle",
+            "certificate_hash": "466d26ae36386077af31fc543ff399712f226487"
           }
         },
-        "oauth_client": [
-          {
-            "client_id": "414767726831-g76sb6e7gg0smuh6tl60v702ggokoatj.apps.googleusercontent.com",
-            "client_type": 1,
-            "android_info": {
-              "package_name": "com.app.matching",
-              "certificate_hash": "d3bee480112918a255f5c730a0c257599e4ab8b8"
+        {
+          "client_id": "522765746801-nsmsgn54iloknegqt0fu8kr0ncfghr4u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcA8owW7QT6TEufZSTUHgroAIk703bPAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522765746801-nsmsgn54iloknegqt0fu8kr0ncfghr4u.apps.googleusercontent.com",
+              "client_type": 3
             }
-          },
-          {
-            "client_id": "414767726831-bi7274hvrs6ntjacg68p9p91rp56qbm4.apps.googleusercontent.com",
-            "client_type": 3
-          }
-        ],
-        "api_key": [
-          {
-            "current_key": "AIzaSyCFJgW7bDpvt1CV137ggXN8A7Rcr5MP678"
-          }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": [
-              {
-                "client_id": "414767726831-bi7274hvrs6ntjacg68p9p91rp56qbm4.apps.googleusercontent.com",
-                "client_type": 3
-              }
-            ]
-          }
+          ]
         }
       }
-    ],
-    "configuration_version": "1"
-  }
+    }
+  ],
+  "configuration_version": "1"
+}

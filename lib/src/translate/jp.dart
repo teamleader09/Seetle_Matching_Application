@@ -1,4 +1,4 @@
-const String appName = "Setteeマッチングアプリ";
+const String appName = "seetleマッチングアプリ";
 const String tryItString = "お試ししてみる";
 const String notTryItString = "試さずスタート";
 const String privacyContent = "ご利用には利用規約とプライバシーポリシーの同意が必要です。";

@@ -1,10 +1,10 @@
-import 'package:settee/src/common/NotificationPermissionDialog.dart';
-import 'package:settee/src/common/termsAgreementDialog.dart';
-import 'package:settee/src/constants/app_button.dart';
-import 'package:settee/src/constants/app_styles.dart';
-import 'package:settee/src/screen/onboarding/onboardingScreen.dart';
-import 'package:settee/src/translate/jp.dart';
-import 'package:settee/src/utils/index.dart';
+import 'package:seetle/src/common/NotificationPermissionDialog.dart';
+import 'package:seetle/src/common/termsAgreementDialog.dart';
+import 'package:seetle/src/constants/app_button.dart';
+import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/screen/onboarding/onboardingScreen.dart';
+import 'package:seetle/src/translate/jp.dart';
+import 'package:seetle/src/utils/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,8 +85,7 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
         onAllow: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => const OnboardingScreen()),
+            MaterialPageRoute(builder: (context) => const OnboardingScreen()),
           );
         },
       ),
@@ -96,63 +95,76 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onWillPop,
+        onWillPop: _onWillPop,
         child: Scaffold(
-        body: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.asset(
-              'assets/images/background/premium.png',
-              fit: BoxFit.cover,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: vhh(context, 85),),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: vMin(context, 45),
-                      child: ButtonWidget(
-                        btnType: ButtonWidgetType.notTryItButton,
-                        borderColor: kColorBorder,
-                        textColor: kColorBlack,
-                        fullColor: kColorTransparent,
-                        size: false,
-                        icon: true,      
-                        onPressed: () {
-                          _showNotificationDialog();
-                        },
-                      ),
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                'assets/images/background/premium.png',
+                fit: BoxFit.cover,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    height: vh(context, 30),
+                    child: Image.asset(
+                      'assets/images/background/splash_title.png', // Path to your local image
+                      width: 200, // Adjust width as needed
+                      height: 46, // Adjust height as needed
+                      fit: BoxFit.contain, // Ensures the image scales properly
                     ),
-                    SizedBox(width: vMin(context, 3),),
-                    SizedBox(
-                      width: vMin(context, 45),
-                      child: ButtonWidget(
-                        btnType: ButtonWidgetType.tryItButton,
-                        borderColor: kColorPrimary,
-                        textColor: kColorWhite,
-                        fullColor: kColorPrimary,
-                        size: false,
-                        icon: true,      
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const OnboardingScreen()),
-                          );
-                        },
+                  ),
+                  SizedBox(
+                    height: vhh(context, 55),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: vMin(context, 45),
+                        child: ButtonWidget(
+                          btnType: ButtonWidgetType.notTryItButton,
+                          borderColor: kColorBorder,
+                          textColor: kColorBlack,
+                          fullColor: kColorTransparent,
+                          size: false,
+                          icon: true,
+                          onPressed: () {
+                            _showNotificationDialog();
+                          },
+                        ),
                       ),
-                    ),
-                  ],
-                )
-                
-              ],
-            ),
-          ],
-        ),
-      )
-    );
+                      SizedBox(
+                        width: vMin(context, 3),
+                      ),
+                      SizedBox(
+                        width: vMin(context, 45),
+                        child: ButtonWidget(
+                          btnType: ButtonWidgetType.tryItButton,
+                          borderColor: kColorPrimary,
+                          textColor: kColorWhite,
+                          fullColor: kColorPrimary,
+                          size: false,
+                          icon: true,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const OnboardingScreen()),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
+          ),
+        ));
   }
 }

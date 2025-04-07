@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:settee/src/exceptions/app_exception.dart';
+import 'package:seetle/src/exceptions/app_exception.dart';
 
 extension AsyncValueUI on AsyncValue {
   bool showAlertDialogOnError(BuildContext context) {

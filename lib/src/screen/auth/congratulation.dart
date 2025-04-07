@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:settee/src/constants/app_styles.dart';
-import 'package:settee/src/screen/home/map.dart';
+import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/screen/home/map.dart';
 
 class CongratulationScreen extends StatefulWidget {
   const CongratulationScreen({super.key});

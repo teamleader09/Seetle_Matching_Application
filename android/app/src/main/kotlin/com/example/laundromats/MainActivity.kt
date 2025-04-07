@@ -1,4 +1,4 @@
-package com.app.matching
+package com.app.seetle
 
 import io.flutter.embedding.android.FlutterActivity
 
