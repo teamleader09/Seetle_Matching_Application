@@ -79,3 +79,14 @@ const String addID = "whoo idで追加";
 const String applying = "申請中";
 const String pending = "保留中";
 const String noUser = "現在友達申請中のユーザーはいません";
+
+//For OTP
+const String loadingBar = "読み込み中...";
+const String verifiedOTP = "OTPが認証された";
+const String verifiedError = "検証失敗";
+const String sentYourPhone = "あなたの電話番号にOTPが送信されます。";
+const String initialPassword = "123456789";
+const String emailError ="エラーが発生しました。もう一度お試しください。";
+const String verifiedEmailOTP = "Eメールにワンタイムパスワードが送信されます。";
+const String alreadyEmail = "メールが既に登録されていますので、別のメールをご利用ください。";
+const String errorSentEmailOTP = "OTP 送信失敗";

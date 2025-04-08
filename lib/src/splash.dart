@@ -48,7 +48,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             child:  Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                SizedBox(height: vh(context, 30)),
+                SizedBox(height: vh(context, 20)),
                 Image.asset(
                   'assets/images/background/logo.png',
                   width: 200,
@@ -56,10 +56,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 ),
                 Container(
                   alignment: Alignment.bottomCenter,
-                  height: vh(context, 30),
-                  child: Text(
-                    appName.toString(),
-                    style: const TextStyle(fontSize: 24, fontFamily: 'Onset', fontWeight: FontWeight.bold, color:kColorPrimary),
+                  height: vh(context, 60),
+                  child: Image.asset(
+                    'assets/images/background/splash_title.png',
+                    width: 200,
+                    height: 200,
                   ),
                 )
               ],

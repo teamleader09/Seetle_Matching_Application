@@ -1,3 +1,4 @@
+import 'package:seetle/src/translate/jp.dart';
 import 'package:toastification/toastification.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +58,7 @@ class Common {
               CircularProgressIndicator(), // Spinner
               SizedBox(height: 20),
               Text(
-                "Loading...",
+                loadingBar,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,

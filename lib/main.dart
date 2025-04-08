@@ -1,3 +1,4 @@
+import 'package:email_otp/email_otp.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,10 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // await Firebase.initializeApp();
+  EmailOTP.config(
+    appName: 'Seetle',
+    otpType: OTPType.numeric,
+    emailTheme: EmailTheme.v6,
+  );
   runApp(const ProviderScope(child: seetle()));
 }

@@ -42,6 +42,7 @@ dependencies:
   geolocator: ^13.0.4
   geocoding: ^3.0.0
   dashed_line: ^0.1.0+3
+  email_otp: ^3.0.2
 
 dev_dependencies:
   flutter_test:

@@ -109,16 +109,15 @@ class _PremiumScreenState extends ConsumerState<PremiumScreen> {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.bottomCenter,
-                    height: vh(context, 30),
+                    height: vh(context, 15),
                     child: Image.asset(
-                      'assets/images/background/splash_title.png', // Path to your local image
-                      width: 200, // Adjust width as needed
-                      height: 46, // Adjust height as needed
-                      fit: BoxFit.contain, // Ensures the image scales properly
+                      'assets/images/background/splash_title.png',
+                      width: vMin(context, 50),
+                      height: vhh(context, 10), 
                     ),
                   ),
                   SizedBox(
-                    height: vhh(context, 55),
+                    height: vhh(context, 70),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

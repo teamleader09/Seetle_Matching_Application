@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/services.dart';
@@ -5,7 +6,9 @@ import 'package:seetle/src/common/authHeader.dart';
 import 'package:seetle/src/constants/app_styles.dart';
 import 'package:seetle/src/screen/auth/verifyScreen.dart';
 import 'package:seetle/src/translate/jp.dart';
+import 'package:seetle/src/utils/common.dart';
 import 'package:seetle/src/utils/index.dart';
+import 'package:seetle/src/model/sendOTP.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
   const PhoneLoginScreen({super.key});
@@ -20,6 +23,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
+  FirebaseAuth auth = FirebaseAuth.instance;
+  String verificationIDReceived = "";
+  final SendOTPController sendOTP = SendOTPController();
 
   @override
   void dispose() {
@@ -50,6 +56,101 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
       emailController.clear();
     }
     setState(() {});
+  }
+
+  void verifyPhoneNumber() {
+    final phone = '$dialCode${phoneController.text.trim()}';
+
+    Common.showLoadingDialog(context);
+
+    auth.verifyPhoneNumber(phoneNumber: phone, 
+    verificationCompleted: (PhoneAuthCredential credential) async{
+      Navigator.of(context, rootNavigator: true).pop();
+      await auth.signInWithCredential(credential).then((value) {
+      });
+    },
+    verificationFailed: (FirebaseAuthException exception) {
+      Navigator.of(context, rootNavigator: true).pop();
+      Common.showErrorMessage(exception.message!, context);
+    },
+    codeSent: (String verificationId, int? resendToken) {
+      Navigator.of(context, rootNavigator: true).pop();
+      verificationIDReceived = verificationId;
+      Common.showSuccessMessage(sentYourPhone, context);
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+            builder: (context) => Verifyscreen(
+              dialCode: isPhoneSelected ? dialCode : null,
+                phoneNumber: isPhoneSelected
+                    ? phoneController.text.trim()
+                    : null,
+                email: isPhoneSelected
+                    ? null
+                    : emailController.text.trim(),
+              verifyReceivedCode: verificationIDReceived,
+              type: "loginOfPhone"
+            )),
+        );
+      });
+    },
+    codeAutoRetrievalTimeout: (String verificationId) {
+      verificationIDReceived = verificationId;
+    },
+    timeout: const Duration(seconds: 60),
+    );
+  }
+
+  void verifyEmail() async{
+    Common.showLoadingDialog(context);
+
+    try {
+      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: initialPassword,
+      );
+
+      String uid = credential.user?.uid ?? "";
+
+      Navigator.of(context, rootNavigator: true).pop();
+
+      final result = await sendOTP.sendOtpWithCloudFunction(emailController.text);
+
+      if(result) {
+        Common.showSuccessMessage(verifiedEmailOTP, context);
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+            MaterialPageRoute(
+              builder: (context) => Verifyscreen(
+                dialCode: isPhoneSelected ? dialCode : null,
+                  phoneNumber: isPhoneSelected
+                      ? phoneController.text.trim()
+                      : null,
+                  email: isPhoneSelected
+                      ? null
+                      : emailController.text.trim(),
+                verifyReceivedCode: verificationIDReceived,
+                type: "loginOfEmail"
+              )),
+          );
+        });
+      }
+      else {
+        Navigator.of(context).pop();
+        Common.showErrorMessage(errorSentEmailOTP, context);
+      }
+      
+    } on FirebaseAuthException catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
+      Common.showErrorMessage(alreadyEmail, context);
+    } catch (e) {
+      Navigator.of(context, rootNavigator: true).pop();
+      Common.showErrorMessage(emailError, context);
+    }
   }
 
   @override
@@ -209,19 +310,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
               child: ElevatedButton(
                 onPressed: (isPhoneSelected ? isPhoneValid : isEmailValid)
                     ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Verifyscreen(
-                                    dialCode: isPhoneSelected ? dialCode : null,
-                                    phoneNumber: isPhoneSelected
-                                        ? phoneController.text.trim()
-                                        : null,
-                                    email: isPhoneSelected
-                                        ? null
-                                        : emailController.text.trim(),
-                                  )),
-                        );
+                        if(isPhoneSelected && isPhoneValid) {
+                          verifyPhoneNumber();
+                        } else {
+                          verifyEmail();
+                        }
                       }
                     : null,
                 style: ElevatedButton.styleFrom(
