@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,10 @@ import 'package:seetle/src/screen/auth/nameScreen.dart';
 import 'package:seetle/src/translate/jp.dart';
 import 'package:seetle/src/utils/common.dart';
 import 'package:seetle/src/utils/index.dart';
+import 'package:seetle/src/constants/global.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Verifyscreen extends StatefulWidget {
   final String? dialCode;
@@ -17,14 +23,14 @@ class Verifyscreen extends StatefulWidget {
   final String? verifyReceivedCode;
   final String? uid;
   final String? type;
-  const Verifyscreen({
-    super.key, 
-    this.dialCode,
-    this.phoneNumber,
-    this.email,
-    this.verifyReceivedCode,
-    this.uid,
-    this.type});
+  const Verifyscreen(
+      {super.key,
+      this.dialCode,
+      this.phoneNumber,
+      this.email,
+      this.verifyReceivedCode,
+      this.uid,
+      this.type});
 
   @override
   State<Verifyscreen> createState() => _VerifyscreenState();
@@ -40,38 +46,72 @@ class _VerifyscreenState extends State<Verifyscreen> {
     super.dispose();
   }
 
-  void verifyCode() async{
+  static Future<Map<String, dynamic>> _verifyContact(String loginInfo) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$apiBaseUrl$verifyContactUrl'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      );
+
+      debugPrint(
+        '[LOG] $response',
+        wrapWidth: 1024, // Prevents message truncation
+      );
+
+      if (response.statusCode == 200) {
+        // Save email to SharedPreferences on successful login
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_email', email);
+
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to login: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Login error: $e');
+    }
+  }
+
+  void verifyCode() async {
     try {
       final credential = PhoneAuthProvider.credential(
         verificationId: widget.verifyReceivedCode!,
         smsCode: verifyCodeController.text,
       );
 
-      await auth.signInWithCredential(credential).then((value) {
+      await auth.signInWithCredential(credential).then((value) async {
         Common.showSuccessMessage(verifiedOTP, context);
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NameInputScreen(),
-            ),
-          );
-        });
+
+        final prefs = await SharedPreferences.getInstance();
+        final email = prefs.getString('email');
+        final apiResponse = await _verifyContact(email.toString());
+
+        // Future.delayed(const Duration(seconds: 2), () {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => const NameInputScreen(),
+        //     ),
+        //   );
+        // });
       });
     } on FirebaseAuthException catch (e) {
       Common.showErrorMessage(verifiedError, context);
     }
   }
 
-  void verifyEmailCode() async{
+  void verifyEmailCode() async {
     Common.showLoadingDialog(context);
     if (await EmailOTP.verifyOTP(otp: verifyCodeController.text)) {
       Navigator.of(context).pop();
       Common.showSuccessMessage(verifiedOTP, context);
       Future.delayed(const Duration(seconds: 1), () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => const NameInputScreen(),
-        ));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NameInputScreen(),
+            ));
       });
     } else {
       Navigator.of(context).pop();
@@ -91,27 +131,25 @@ class _VerifyscreenState extends State<Verifyscreen> {
           children: [
             SizedBox(height: vhh(context, 5)),
             const AuthHeaderWidget(),
-
             Center(
               child: Text(
                 checkedCode.toString(),
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
             ),
             SizedBox(height: vhh(context, 3)),
-
             Center(
               child: Text(
                 widget.email != null
-                  ? '認証コードを ${widget.email} に送信しました'
-                  : 'SMSを ${widget.dialCode}${widget.phoneNumber} ${sendMsg.toString()}',
+                    ? '認証コードを ${widget.email} に送信しました'
+                    : 'SMSを ${widget.dialCode}${widget.phoneNumber} ${sendMsg.toString()}',
                 style: const TextStyle(fontSize: 14),
                 textAlign: TextAlign.center,
               ),
             ),
             SizedBox(height: vhh(context, 3)),
-
             Container(
               height: vhh(context, 6),
               decoration: BoxDecoration(
@@ -133,7 +171,8 @@ class _VerifyscreenState extends State<Verifyscreen> {
                       filled: true,
                       isCollapsed: true,
                       fillColor: kColorLightGray,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 15),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(6),
                         borderSide: BorderSide.none,
@@ -143,13 +182,15 @@ class _VerifyscreenState extends State<Verifyscreen> {
                 ],
               ),
             ),
-
             SizedBox(height: vhh(context, 2)),
-
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: isButtonEnabled ? widget.type == "loginOfPhone" ? verifyCode : verifyEmailCode : null,
+                onPressed: isButtonEnabled
+                    ? widget.type == "loginOfPhone"
+                        ? verifyCode
+                        : verifyEmailCode
+                    : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kColorMediumBlue,
                   foregroundColor: kColorWhite,
@@ -161,10 +202,13 @@ class _VerifyscreenState extends State<Verifyscreen> {
                       // ignore: deprecated_member_use
                       kColorMediumBlue.withOpacity(0.5),
                 ),
-                child: const Text(nextString, style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: kColorWhite,
-                ),),
+                child: const Text(
+                  nextString,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: kColorWhite,
+                  ),
+                ),
               ),
             ),
           ],
