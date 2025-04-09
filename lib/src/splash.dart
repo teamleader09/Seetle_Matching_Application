@@ -1,4 +1,5 @@
 import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/screen/home/map.dart';
 import 'package:seetle/src/screen/premium/index.dart';
 import 'package:seetle/src/translate/jp.dart';
 import 'package:seetle/src/utils/index.dart';
@@ -27,6 +28,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       if(myId == null || myId.isEmpty) {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => const PremiumScreen(),
+        ));
+      } else {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const MapScreen(),
         ));
       }
     });

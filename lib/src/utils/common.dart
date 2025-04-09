@@ -9,15 +9,15 @@ class Common {
         context: context,
         type: ToastificationType.success,
         style: ToastificationStyle.flatColored,
-        title: Text(msg),
+        title: Text(msg, style: const TextStyle(fontSize: 12),),
         primaryColor: Colors.green,
         foregroundColor: Colors.black,
         showProgressBar: false,
         animationDuration: const Duration(milliseconds: 300),
         autoCloseDuration: const Duration(seconds: 3),
         animationBuilder: (context, animation, alignment, child) {
-          return RotationTransition(
-            turns: animation,
+          return FadeTransition(
+            opacity: animation,
             child: child,
           );
         },
@@ -29,15 +29,15 @@ class Common {
         context: context,
         type: ToastificationType.error,
         style: ToastificationStyle.flatColored,
-        title: Text(msg),
+        title: Text(msg, style: const TextStyle(fontSize: 12),),
         primaryColor: Colors.red,
         foregroundColor: Colors.black,
         showProgressBar: false,
         animationDuration: const Duration(milliseconds: 300),
         autoCloseDuration: const Duration(seconds: 3),
         animationBuilder: (context, animation, alignment, child) {
-          return RotationTransition(
-            turns: animation,
+          return FadeTransition(
+            opacity: animation,
             child: child,
           );
         },

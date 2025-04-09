@@ -6,9 +6,11 @@ import 'package:seetle/src/common/currentPosition.dart';
 import 'package:seetle/src/common/profileBottomSheet.dart';
 import 'package:seetle/src/common/whooSettingModalSheet.dart';
 import 'package:seetle/src/common/addFriendBottomSheet.dart';
+import 'package:seetle/src/screen/auth/phoneLogin.dart';
 import 'package:seetle/src/translate/jp.dart';
 import 'package:seetle/src/utils/index.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -232,8 +234,14 @@ class _MapScreenState extends State<MapScreen> {
                           size: 25,
                           color: Colors.white,
                         ),
-                        onPressed: () {
-                          // Search action
+                        onPressed: () async{
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.remove('uId');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PhoneLoginScreen()),
+                          );
                         },
                         padding: const EdgeInsets.all(0),
                       ),

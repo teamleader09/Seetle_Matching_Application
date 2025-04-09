@@ -1,20 +1,24 @@
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/controller/authController.dart';
 import 'package:seetle/src/screen/auth/congratulation.dart';
 import 'package:seetle/src/translate/jp.dart';
+import 'package:seetle/src/utils/common.dart';
 import 'package:seetle/src/utils/index.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 
-class ChooseImageScreen extends StatefulWidget {
-  const ChooseImageScreen({super.key});
-
+class ChooseImageScreen extends ConsumerStatefulWidget {
+  const ChooseImageScreen({Key? key}) : super(key: key);
   @override
-  State<ChooseImageScreen> createState() => _ChooseImageScreenState();
+  ConsumerState<ChooseImageScreen> createState() => _ChooseImageScreenState();
 }
 
-class _ChooseImageScreenState extends State<ChooseImageScreen> {
+class _ChooseImageScreenState extends ConsumerState<ChooseImageScreen> {
   XFile? _image; 
 
   @override
@@ -22,12 +26,46 @@ class _ChooseImageScreenState extends State<ChooseImageScreen> {
     super.dispose();
   }
 
-  void _handleNext() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CongratulationScreen(),
-      ),
+  Future<void> _handleNext() async{
+    if (_image == null) {
+      return;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    String userName = prefs.getString('username')!;
+    String birthday = prefs.getString('birthday')!;
+    String nickName = prefs.getString('nickname')!;
+    String password = prefs.getString('password')!;
+    String email = prefs.getString('email') ?? '';
+    String phone = prefs.getString('phone') ?? '';
+
+    final bytes = await File(_image!.path).readAsBytes();
+    String base64Image = base64Encode(bytes);
+    String imageName = _image!.path.split('/').last;
+    Common.showLoadingDialog(context);
+    final controller = ref.read(authControllerProvider.notifier);
+    controller.registerData(userName, birthday, nickName, password, imageName, base64Image, email, phone).then(
+      (value) async{
+        if (value == true) {
+          await prefs.remove('username');
+          await prefs.remove('birthday');
+          await prefs.remove('nickname');
+          await prefs.remove('password');
+          await prefs.remove('email');
+          await prefs.remove('phone');
+          Navigator.of(context).pop();
+          Common.showSuccessMessage(registerSuccess, context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CongratulationScreen(),
+            ),
+          );
+        } else {
+          Navigator.of(context).pop();
+          Common.showSuccessMessage(registerFail, context);
+        }
+      },
     );
   }
 

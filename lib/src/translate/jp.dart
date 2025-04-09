@@ -25,21 +25,21 @@ const String email = "メールアドレス";
 const String checkPrivacyPolicy = "プライバシーポリシーをご確認ください";
 const String checkedCode = "確認コードを入力してください";
 const String sendMsg = "に送信しました。";
-const String beRealTitle = "BeReal.";
+const String beRealTitle = "Seetle";
 const String inputName = "名前を教えてください";
 const String nameExample = "友達から普段なんて呼ばれていますか？";
 const String continueTitle = "続ける";
 const String inputNamePls = "ここに名前を入力してください";
 const String inputBirthday = "誕生日はいつですか？";
-const String birthdayConfirmed = "BeRealを使用できる年齢に達しているかの確認のためです。";
+const String birthdayConfirmed = "Seetleを使用できる年齢に達しているかの確認のためです。";
 const String makeNickname = "ユーザー名を作成";
 const String nickNameExample = "ニックネームを入力してください";
 const String unUseful = "利用不可です";
 const String findFriend = "友達を見つける";
-const String findFriendSubText = "すでに BeReal を使っている友達を見つけてリアルな瞬間を覗いてみましょう。";
-const String requestAccess = "“BeReal.” が連絡先へのアクセスを求めています";
+const String findFriendSubText = "すでに Seetle を使っている友達を見つけてリアルな瞬間を覗いてみましょう。";
+const String requestAccess = "“Seetle.” が連絡先へのアクセスを求めています";
 const String requestAccessSubText =
-    "BeReal はあなたの連絡先からBeReal ユーザーを検索します。あなたの連絡先は保存、 または公開されることはありません。";
+    "Seetle はあなたの連絡先からSeetle ユーザーを検索します。あなたの連絡先は保存、 または公開されることはありません。";
 const String skipText = "スキップ";
 const String requestPassword = "ログイン時にパスワードが必要です\n8桁以上の英数字を入力してください";
 const String inputPassword = "パスワードを入力してください。";
@@ -90,3 +90,9 @@ const String emailError ="エラーが発生しました。もう一度お試し
 const String verifiedEmailOTP = "Eメールにワンタイムパスワードが送信されます。";
 const String alreadyEmail = "メールが既に登録されていますので、別のメールをご利用ください。";
 const String errorSentEmailOTP = "OTP 送信失敗";
+
+//For Register
+const String registerSuccess ="正確に登録されました。";
+const String registerFail = "登録に失敗しました。";
+const String wrongPassword = "パスワードが正しくありません。";
+const String successLogin = "ログインに成功しました。";

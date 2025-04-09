@@ -4,21 +4,22 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:seetle/src/common/authHeader.dart';
 import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/controller/authController.dart';
 import 'package:seetle/src/screen/auth/verifyScreen.dart';
 import 'package:seetle/src/translate/jp.dart';
 import 'package:seetle/src/utils/common.dart';
 import 'package:seetle/src/utils/index.dart';
 import 'package:seetle/src/model/sendOTP.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-class PhoneLoginScreen extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
+class PhoneLoginScreen extends ConsumerStatefulWidget {
   const PhoneLoginScreen({super.key});
 
   @override
-  State<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
+  ConsumerState<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
 }
 
-class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
+class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
   bool isPhoneSelected = true;
   String dialCode = '+81';
 
@@ -78,20 +79,18 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
         Navigator.of(context, rootNavigator: true).pop();
         verificationIDReceived = verificationId;
         Common.showSuccessMessage(sentYourPhone, context);
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.push(
-            // ignore: use_build_context_synchronously
-            context,
-            MaterialPageRoute(
-                builder: (context) => Verifyscreen(
-                    dialCode: isPhoneSelected ? dialCode : null,
-                    phoneNumber:
-                        isPhoneSelected ? phoneController.text.trim() : null,
-                    email: isPhoneSelected ? null : emailController.text.trim(),
-                    verifyReceivedCode: verificationIDReceived,
-                    type: "loginOfPhone")),
-          );
-        });
+        Navigator.push(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+              builder: (context) => Verifyscreen(
+                  dialCode: isPhoneSelected ? dialCode : null,
+                  phoneNumber:
+                      isPhoneSelected ? phoneController.text.trim() : null,
+                  email: isPhoneSelected ? null : emailController.text.trim(),
+                  verifyReceivedCode: verificationIDReceived,
+                  type: "loginOfPhone")),
+        );
       },
       codeAutoRetrievalTimeout: (String verificationId) {
         verificationIDReceived = verificationId;
@@ -102,62 +101,82 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
 
   void verifyEmail() async {
     Common.showLoadingDialog(context);
+    final controller = ref.read(authControllerProvider.notifier);
+      controller.loginAction(emailController.text).then(
+      (value) async{
+        print(value);
+        if (value == true) {
+          try {
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: emailController.text,
+              password: initialPassword,
+            );
 
-    try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
-        password: initialPassword,
-      );
+            final result = await sendOTP.sendOtpWithCloudFunction(emailController.text);
 
-      String uid = credential.user?.uid ?? "";
+            if(result) {
+              Navigator.of(context).pop();
+              Common.showSuccessMessage(verifiedEmailOTP, context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Verifyscreen(
+                        dialCode: isPhoneSelected ? dialCode : null,
+                        phoneNumber:
+                            isPhoneSelected ? phoneController.text.trim() : null,
+                        email: isPhoneSelected ? null : emailController.text.trim(),
+                        verifyReceivedCode: verificationIDReceived,
+                        type: "loginOfEmail")),
+              );
+            }
+            else {
+              Navigator.of(context).pop();
+              Common.showErrorMessage(errorSentEmailOTP, context);
+            }
 
-      Navigator.of(context, rootNavigator: true).pop();
+          } on FirebaseAuthException catch (e) {
+            Navigator.of(context).pop();
+          } catch (e) {
+            Navigator.of(context).pop();
+          }
+        } else {
+          try {
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: emailController.text,
+              password: initialPassword,
+            );
+            final result =
+                await sendOTP.sendOtpWithCloudFunction(emailController.text);
 
-      sendVerifyCode(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.of(context, rootNavigator: true).pop();
-      sendVerifyCode(context);
-    } catch (e) {
-      Navigator.of(context, rootNavigator: true).pop();
-      Common.showErrorMessage(emailError, context);
-    }
+            if (result) {
+              Navigator.of(context, rootNavigator: true).pop();
+              Common.showSuccessMessage(verifiedEmailOTP, context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Verifyscreen(
+                        dialCode: isPhoneSelected ? dialCode : null,
+                        phoneNumber:
+                            isPhoneSelected ? phoneController.text.trim() : null,
+                        email: isPhoneSelected ? null : emailController.text.trim(),
+                        verifyReceivedCode: verificationIDReceived,
+                        type: "loginOfEmail")),
+              );
+            } else {
+              Navigator.of(context).pop();
+              Common.showErrorMessage(errorSentEmailOTP, context);
+            }
+          } on FirebaseAuthException catch (e) {
+            Navigator.of(context, rootNavigator: true).pop();
+            Common.showErrorMessage(alreadyEmail, context);
+          } catch (e) {
+            Navigator.of(context, rootNavigator: true).pop();
+            Common.showErrorMessage(emailError, context);
+          }
+        }
+      },
+    );
   }
-
-  void sendVerifyCode(BuildContext context) async {
-    try {
-      final result =
-          await sendOTP.sendOtpWithCloudFunction(emailController.text);
-
-      if (result) {
-        Common.showSuccessMessage(verifiedEmailOTP, context);
-
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('email', emailController.text);
-
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Verifyscreen(
-                    dialCode: isPhoneSelected ? dialCode : null,
-                    phoneNumber:
-                        isPhoneSelected ? phoneController.text.trim() : null,
-                    email: isPhoneSelected ? null : emailController.text.trim(),
-                    verifyReceivedCode: verificationIDReceived,
-                    type: "loginOfEmail")),
-          );
-        });
-      } else {
-        Navigator.of(context).pop();
-        Common.showErrorMessage(errorSentEmailOTP, context);
-      }
-    } catch (e) {
-      Navigator.of(context, rootNavigator: true).pop();
-      Common.showErrorMessage(emailError, context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -318,8 +337,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         if (isPhoneSelected && isPhoneValid) {
                           verifyPhoneNumber();
                         } else {
-                          // verifyEmail();
-                          sendVerifyCode(context);
+                          verifyEmail();
                         }
                       }
                     : null,

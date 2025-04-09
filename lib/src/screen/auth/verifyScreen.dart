@@ -1,22 +1,21 @@
-import 'dart:math';
-
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:seetle/src/common/authHeader.dart';
 import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/controller/authController.dart';
 import 'package:seetle/src/model/sendOTP.dart';
+import 'package:seetle/src/screen/auth/inputPassword.dart';
 import 'package:seetle/src/screen/auth/nameScreen.dart';
 import 'package:seetle/src/translate/jp.dart';
 import 'package:seetle/src/utils/common.dart';
 import 'package:seetle/src/utils/index.dart';
-import 'package:seetle/src/constants/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 
-class Verifyscreen extends StatefulWidget {
+class Verifyscreen extends ConsumerStatefulWidget {
   final String? dialCode;
   final String? phoneNumber;
   final String? email;
@@ -33,10 +32,10 @@ class Verifyscreen extends StatefulWidget {
       this.type});
 
   @override
-  State<Verifyscreen> createState() => _VerifyscreenState();
+  ConsumerState<Verifyscreen> createState() => _VerifyscreenState();
 }
 
-class _VerifyscreenState extends State<Verifyscreen> {
+class _VerifyscreenState extends ConsumerState<Verifyscreen> {
   final verifyCodeController = TextEditingController();
   final SendOTPController sendOTP = SendOTPController();
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -44,33 +43,6 @@ class _VerifyscreenState extends State<Verifyscreen> {
   void dispose() {
     verifyCodeController.dispose();
     super.dispose();
-  }
-
-  static Future<Map<String, dynamic>> _verifyContact(String loginInfo) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$apiBaseUrl$verifyContactUrl'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email}),
-      );
-
-      debugPrint(
-        '[LOG] $response',
-        wrapWidth: 1024, // Prevents message truncation
-      );
-
-      if (response.statusCode == 200) {
-        // Save email to SharedPreferences on successful login
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_email', email);
-
-        return jsonDecode(response.body);
-      } else {
-        throw Exception('Failed to login: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Login error: $e');
-    }
   }
 
   void verifyCode() async {
@@ -82,19 +54,30 @@ class _VerifyscreenState extends State<Verifyscreen> {
 
       await auth.signInWithCredential(credential).then((value) async {
         Common.showSuccessMessage(verifiedOTP, context);
-
-        final prefs = await SharedPreferences.getInstance();
-        final email = prefs.getString('email');
-        final apiResponse = await _verifyContact(email.toString());
-
-        // Future.delayed(const Duration(seconds: 2), () {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => const NameInputScreen(),
-        //     ),
-        //   );
-        // });
+        final controller = ref.read(authControllerProvider.notifier);
+          controller.loginAction('${widget.dialCode}${widget.phoneNumber}').then(
+          (value) async{
+            if (value == true) {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString('phone', '${widget.dialCode}${widget.phoneNumber}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const InputPasswordScreen(type: 'login'),
+                ),
+              );
+            } else {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setString('phone', '${widget.dialCode}${widget.phoneNumber}');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NameInputScreen(),
+                ),
+              );
+            }
+          },
+        );
       });
     } on FirebaseAuthException catch (e) {
       Common.showErrorMessage(verifiedError, context);
@@ -105,14 +88,30 @@ class _VerifyscreenState extends State<Verifyscreen> {
     Common.showLoadingDialog(context);
     if (await EmailOTP.verifyOTP(otp: verifyCodeController.text)) {
       Navigator.of(context).pop();
-      Common.showSuccessMessage(verifiedOTP, context);
-      Future.delayed(const Duration(seconds: 1), () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NameInputScreen(),
+      final controller = ref.read(authControllerProvider.notifier);
+        controller.loginAction(widget.email!).then(
+        (value) async{
+          if (value == true) {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('email', widget.email!);
+            Common.showSuccessMessage(verifiedOTP, context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const InputPasswordScreen(type: 'login'),
             ));
-      });
+          } else {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('email', widget.email!);
+            Common.showSuccessMessage(verifiedOTP, context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NameInputScreen(),
+            ));
+          }
+        },
+      );
     } else {
       Navigator.of(context).pop();
       Common.showErrorMessage(verifiedError, context);

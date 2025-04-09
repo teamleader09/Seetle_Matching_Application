@@ -39,7 +39,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const InputPasswordScreen()),
+        builder: (context) => const InputPasswordScreen(type: 'register')),
     );
   }
 

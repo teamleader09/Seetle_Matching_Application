@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:seetle/src/constants/app_styles.dart';
+import 'package:seetle/src/controller/authController.dart';
 import 'package:seetle/src/screen/auth/chooseImage.dart';
+import 'package:seetle/src/screen/home/map.dart';
 import 'package:seetle/src/translate/jp.dart';
+import 'package:seetle/src/utils/common.dart';
 import 'package:seetle/src/utils/index.dart';
-
-class InputPasswordScreen extends StatefulWidget {
-  const InputPasswordScreen({super.key});
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
+class InputPasswordScreen extends ConsumerStatefulWidget {
+  final String type;
+  const InputPasswordScreen({super.key, required this.type});
 
   @override
-  State<InputPasswordScreen> createState() => _InputPasswordScreenState();
+  ConsumerState<InputPasswordScreen> createState() => _InputPasswordScreenState();
 }
 
-class _InputPasswordScreenState extends State<InputPasswordScreen> {
+class _InputPasswordScreenState extends ConsumerState<InputPasswordScreen> {
   final passwordController = TextEditingController();
 
   @override
@@ -20,11 +26,43 @@ class _InputPasswordScreenState extends State<InputPasswordScreen> {
     super.dispose();
   }
   
-  void _handleNext() {
+  void _handleNext() async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('password', passwordController.text);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const ChooseImageScreen()),
+    );
+  }
+
+  void _loginHandle() async{
+    final prefs = await SharedPreferences.getInstance();
+    String? email = prefs.getString('email');
+    String? phoneNumber = prefs.getString('phone');
+    String? emailOrPhone;
+
+    if (email != null && email.isNotEmpty) {
+      emailOrPhone = email;
+    }
+    else if (phoneNumber != null && phoneNumber.isNotEmpty) {
+      emailOrPhone = phoneNumber;
+    }
+
+    final controller = ref.read(authControllerProvider.notifier);
+    controller.loginWithPassword(emailOrPhone??'', passwordController.text).then(
+      (value) async{
+        if (value == true) {
+          Common.showSuccessMessage(successLogin, context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MapScreen()),
+          );
+        } else {
+          Common.showErrorMessage(wrongPassword, context);
+        }
+      },
     );
   }
 
@@ -39,7 +77,7 @@ class _InputPasswordScreenState extends State<InputPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isButtonEnabled = passwordController.text.trim().isNotEmpty;
+    final isButtonEnabled = passwordController.text.trim().isNotEmpty && passwordController.text.trim().length >= 8;
 
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -85,7 +123,7 @@ class _InputPasswordScreenState extends State<InputPasswordScreen> {
                     SizedBox(
                       width: vMin(context, 13),
                       child: ElevatedButton(
-                        onPressed: isButtonEnabled ? _handleNext : null,
+                        onPressed: isButtonEnabled ? widget.type == 'register' ? _handleNext : _loginHandle : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: kColorWhite,
                           disabledBackgroundColor: kColorWhite.withOpacity(0.5),

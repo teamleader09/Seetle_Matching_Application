@@ -148,11 +148,11 @@ class _BirthdayPickerScreenState extends State<BirthdayPickerScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: selectedDate != null
-                          ? () {
-                              _handleNext();
-                            }
-                          : null,
+                      onPressed: selectedDate != null && _calculateAge(selectedDate) >= 16
+                        ? () {
+                            _handleNext();
+                          }
+                        : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: kColorWhite,
                         disabledBackgroundColor: kColorWhite.withOpacity(0.5),
