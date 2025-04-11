@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:seetle/src/model/dio_exception.dart';
+import 'package:settee/src/model/dio_exception.dart';
 
 class DioClient {
   static final _baseOptions = BaseOptions(

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import 'package:seetle/src/utils/string_hardcoded.dart';
+import 'package:settee/src/utils/string_hardcoded.dart';
 
 class DioExceptions implements Exception {
   late String message;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:seetle/src/translate/jp.dart';
-import 'package:seetle/src/utils/index.dart';
-import 'package:seetle/src/constants/app_styles.dart';
+import 'package:settee/src/translate/jp.dart';
+import 'package:settee/src/utils/index.dart';
+import 'package:settee/src/constants/app_styles.dart';
 
 class WhooSettingsScreen extends StatelessWidget {
   @override

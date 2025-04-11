@@ -1,4 +1,4 @@
-import 'package:seetle/src/translate/jp.dart';
+import 'package:settee/src/translate/jp.dart';
 import 'package:toastification/toastification.dart';
 import 'package:flutter/material.dart';
 

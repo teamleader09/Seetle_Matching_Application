@@ -1,4 +1,4 @@
-# seetle
+# settee
 
 A new Flutter project.
 

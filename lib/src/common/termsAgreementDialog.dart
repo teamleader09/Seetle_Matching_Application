@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:seetle/src/utils/index.dart';
+import 'package:settee/src/utils/index.dart';
 
 class TermsAgreementDialog extends StatelessWidget {
   final String content;

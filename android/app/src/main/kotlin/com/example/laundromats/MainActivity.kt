@@ -1,4 +1,4 @@
-package com.app.seetle
+package com.app.settee
 
 import io.flutter.embedding.android.FlutterActivity
 

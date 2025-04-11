@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:seetle/src/repository/authRepository.dart';
+import 'package:settee/src/repository/authRepository.dart';
 // * ---------------------------------------------------------------------------
 // * AuthController
 // * ---------------------------------------------------------------------------

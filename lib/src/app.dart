@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:seetle/src/routing/app_router.dart';
+import 'package:settee/src/routing/app_router.dart';
 
-class seetle extends ConsumerWidget {
-  const seetle({super.key});
+class settee extends ConsumerWidget {
+  const settee({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +18,7 @@ class seetle extends ConsumerWidget {
         return MaterialApp.router(
           routerConfig: goRouter,
           debugShowCheckedModeBanner: false,
-          title: 'seetle',
+          title: 'settee',
         );
       },
     );

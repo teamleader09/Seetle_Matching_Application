@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:seetle/src/model/dio_client.dart';
+import 'package:settee/src/model/dio_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {

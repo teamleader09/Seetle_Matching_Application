@@ -2,7 +2,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
-        android:label="seetle"
+        android:label="settee"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -33,7 +33,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyD3RzMXwBnA6g898bHtvih05bKc0BfhjlI"
+           android:value="AIzaSyAVPD5PbpuYRB2m6OzcC3NtgNTh7Q0B-QA"
            />
     </application>
     <!-- Required to query activities that can process text, see:

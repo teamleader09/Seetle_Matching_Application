@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:522765746801:android:72dc0fbdfb86bb05ca11d0",
         "android_client_info": {
-          "package_name": "com.app.seetle"
+          "package_name": "com.app.settee"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "522765746801-5u3c3gtiaas099v3o6ds2eiisec9nqis.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.app.seetle",
+            "package_name": "com.app.settee",
             "certificate_hash": "466d26ae36386077af31fc543ff399712f226487"
           }
         },

@@ -1,10 +1,10 @@
-import 'package:seetle/src/common/NotificationPermissionDialog.dart';
-import 'package:seetle/src/common/termsAgreementDialog.dart';
-import 'package:seetle/src/constants/app_button.dart';
-import 'package:seetle/src/constants/app_styles.dart';
-import 'package:seetle/src/screen/onboarding/onboardingScreen.dart';
-import 'package:seetle/src/translate/jp.dart';
-import 'package:seetle/src/utils/index.dart';
+import 'package:settee/src/common/NotificationPermissionDialog.dart';
+import 'package:settee/src/common/termsAgreementDialog.dart';
+import 'package:settee/src/constants/app_button.dart';
+import 'package:settee/src/constants/app_styles.dart';
+import 'package:settee/src/screen/onboarding/onboardingScreen.dart';
+import 'package:settee/src/translate/jp.dart';
+import 'package:settee/src/utils/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';

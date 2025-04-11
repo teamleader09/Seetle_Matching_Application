@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:seetle/src/constants/app_styles.dart';
-import 'package:seetle/src/controller/authController.dart';
-import 'package:seetle/src/screen/auth/addMember.dart';
-import 'package:seetle/src/translate/jp.dart';
-import 'package:seetle/src/utils/index.dart';
+import 'package:settee/src/constants/app_styles.dart';
+import 'package:settee/src/controller/authController.dart';
+import 'package:settee/src/screen/auth/addMember.dart';
+import 'package:settee/src/translate/jp.dart';
+import 'package:settee/src/utils/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';

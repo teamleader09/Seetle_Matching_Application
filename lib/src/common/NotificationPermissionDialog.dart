@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:seetle/src/constants/app_styles.dart';
+import 'package:settee/src/constants/app_styles.dart';
 
 class NotificationPermissionDialog extends StatelessWidget {
   final String title;
