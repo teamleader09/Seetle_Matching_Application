@@ -4,14 +4,17 @@ import 'package:settee/src/controller/authController.dart';
 import 'package:settee/src/screen/auth/addMember.dart';
 import 'package:settee/src/translate/jp.dart';
 import 'package:settee/src/utils/index.dart';
+import 'package:settee/src/common/progressContainer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
+
 class InputNicknameScreen extends ConsumerStatefulWidget {
   const InputNicknameScreen({super.key});
 
   @override
-  ConsumerState<InputNicknameScreen> createState() => _InputNicknameScreenState();
+  ConsumerState<InputNicknameScreen> createState() =>
+      _InputNicknameScreenState();
 }
 
 class _InputNicknameScreenState extends ConsumerState<InputNicknameScreen> {
@@ -27,7 +30,7 @@ class _InputNicknameScreenState extends ConsumerState<InputNicknameScreen> {
   void _handleNext() async {
     final controller = ref.read(authControllerProvider.notifier);
     controller.compareNickname(nameController.text).then(
-      (value) async{
+      (value) async {
         if (value == true) {
           setState(() {
             isNicknameAvailable = true;
@@ -80,7 +83,12 @@ class _InputNicknameScreenState extends ConsumerState<InputNicknameScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: vhh(context, 5)),
+                  SizedBox(height: vhh(context, 2)),
+                  ProgressContainer(
+                    current: 3,
+                    total: 6,
+                  ),
+                  SizedBox(height: vhh(context, 2)),
                   const Text(
                     makeNickname,
                     style: TextStyle(
@@ -109,24 +117,24 @@ class _InputNicknameScreenState extends ConsumerState<InputNicknameScreen> {
                   ),
                   SizedBox(height: vhh(context, 3)),
                   if (!isNicknameAvailable)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.remove_circle,
-                        color: kColorLightGray,
-                        size: 16,
-                      ),
-                      SizedBox(
-                        width: vMin(context, 1),
-                      ),
-                      const Text(
-                        unUseful,
-                        style: TextStyle(color: kColorLightGray),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.remove_circle,
+                          color: kColorLightGray,
+                          size: 16,
+                        ),
+                        SizedBox(
+                          width: vMin(context, 1),
+                        ),
+                        const Text(
+                          unUseful,
+                          style: TextStyle(color: kColorLightGray),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   const Spacer(),
                   SizedBox(
                     width: double.infinity,

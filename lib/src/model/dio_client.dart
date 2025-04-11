@@ -8,7 +8,7 @@ import 'package:settee/src/model/dio_exception.dart';
 
 class DioClient {
   static final _baseOptions = BaseOptions(
-    baseUrl: 'http://192.168.141.103:3000/api',
+    baseUrl: 'http://10.0.2.2:8000/api',
     headers: {
       'Content-type': 'application/json',
       'Accept': 'application/json',
@@ -33,13 +33,29 @@ class DioClient {
   }
 
   // * POST: '/register'
-  static Future<dynamic> postRegister(String userName, String birthday, String nickName, String password, String imageName,String base64Image, String email, String phone) async {
+  static Future<dynamic> postRegister(
+      String userName,
+      String birthday,
+      String nickName,
+      String password,
+      String imageName,
+      String base64Image,
+      String email,
+      String phone) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-      final response = await dio.post('/register',
-          data: {'username': userName, 'nickname': nickName, 'email': email, 'password': password, 'phone': phone, 'birthday': birthday, 'image_name': imageName, 'image_file': base64Image,});
+      final response = await dio.post('/register', data: {
+        'username': userName,
+        'nickname': nickName,
+        'email': email,
+        'password': password,
+        'phone': phone,
+        'birthday': birthday,
+        'image_name': imageName,
+        'image_file': base64Image,
+      });
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -53,8 +69,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-      final response = await dio.post('/compare_nickname',
-          data: {'nickname': nickName});
+      final response =
+          await dio.post('/compare_nickname', data: {'nickname': nickName});
       return response.data;
     } on DioError catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
@@ -68,8 +84,8 @@ class DioClient {
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;
     try {
-      final response = await dio.post('/login_action',
-          data: {'email_number': emailOrNumber});
+      final response = await dio
+          .post('/login_action', data: {'email_number': emailOrNumber});
       print(response.data);
       return response.data;
     } on DioError catch (e) {
@@ -79,7 +95,8 @@ class DioClient {
   }
 
   // * POST: '/login_with_password'
-  static Future<dynamic> loginWithPassword(String emailOrNumber, String password) async {
+  static Future<dynamic> loginWithPassword(
+      String emailOrNumber, String password) async {
     final token = await _getToken();
     var dio = Dio(_baseOptions);
     dio.options.headers['X-CSRF-TOKEN'] = token;

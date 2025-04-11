@@ -7,6 +7,7 @@ import 'package:settee/src/common/profileBottomSheet.dart';
 import 'package:settee/src/common/whooSettingModalSheet.dart';
 import 'package:settee/src/common/addFriendBottomSheet.dart';
 import 'package:settee/src/screen/auth/phoneLogin.dart';
+import 'package:settee/src/screen/home/inviteScreen.dart';
 import 'package:settee/src/translate/jp.dart';
 import 'package:settee/src/utils/index.dart';
 import 'package:geocoding/geocoding.dart';
@@ -78,7 +79,11 @@ class _MapScreenState extends State<MapScreen> {
             await Permission.locationAlways.request();
             Navigator.of(context).pop();
           },
-          onCancel: () => Navigator.of(context).pop(),
+          // onCancel: () => Navigator.of(context).pop(),
+          onCancel: () => {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const InviteScreen()))
+          },
         );
       },
     );
@@ -234,13 +239,13 @@ class _MapScreenState extends State<MapScreen> {
                           size: 25,
                           color: Colors.white,
                         ),
-                        onPressed: () async{
+                        onPressed: () async {
                           final prefs = await SharedPreferences.getInstance();
                           await prefs.remove('uId');
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const PhoneLoginScreen()),
+                                builder: (context) => const PhoneLoginScreen()),
                           );
                         },
                         padding: const EdgeInsets.all(0),

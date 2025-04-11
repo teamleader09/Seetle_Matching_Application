@@ -86,13 +86,17 @@ const String verifiedOTP = "OTPが認証された";
 const String verifiedError = "検証失敗";
 const String sentYourPhone = "あなたの電話番号にOTPが送信されます。";
 const String initialPassword = "123456789";
-const String emailError ="エラーが発生しました。もう一度お試しください。";
+const String emailError = "エラーが発生しました。もう一度お試しください。";
 const String verifiedEmailOTP = "Eメールにワンタイムパスワードが送信されます。";
 const String alreadyEmail = "メールが既に登録されていますので、別のメールをご利用ください。";
 const String errorSentEmailOTP = "OTP 送信失敗";
 
 //For Register
-const String registerSuccess ="正確に登録されました。";
+const String registerSuccess = "正確に登録されました。";
 const String registerFail = "登録に失敗しました。";
 const String wrongPassword = "パスワードが正しくありません。";
 const String successLogin = "ログインに成功しました。";
+
+// Add Friend Via Instagram
+const String startWithFriend = "素敵な友達と一緒にはじめよう!";
+const String sendToFriend = "友達に送る";

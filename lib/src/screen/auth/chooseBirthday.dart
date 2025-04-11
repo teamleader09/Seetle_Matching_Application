@@ -4,6 +4,7 @@ import 'package:settee/src/constants/app_styles.dart';
 import 'package:settee/src/screen/auth/inputNickname.dart';
 import 'package:settee/src/translate/jp.dart';
 import 'package:settee/src/utils/index.dart';
+import 'package:settee/src/common/progressContainer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BirthdayPickerScreen extends StatefulWidget {
@@ -105,7 +106,12 @@ class _BirthdayPickerScreenState extends State<BirthdayPickerScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: vhh(context, 5)),
+                  SizedBox(height: vhh(context, 2)),
+                  ProgressContainer(
+                    current: 2,
+                    total: 6,
+                  ),
+                  SizedBox(height: vhh(context, 2)),
                   const Text(
                     inputBirthday,
                     style: TextStyle(
@@ -148,11 +154,12 @@ class _BirthdayPickerScreenState extends State<BirthdayPickerScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: selectedDate != null && _calculateAge(selectedDate) >= 16
-                        ? () {
-                            _handleNext();
-                          }
-                        : null,
+                      onPressed: selectedDate != null &&
+                              _calculateAge(selectedDate) >= 16
+                          ? () {
+                              _handleNext();
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: kColorWhite,
                         disabledBackgroundColor: kColorWhite.withOpacity(0.5),

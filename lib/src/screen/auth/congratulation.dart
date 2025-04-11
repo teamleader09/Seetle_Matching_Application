@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:settee/src/utils/index.dart';
+import 'package:settee/src/common/progressContainer.dart';
 import 'package:settee/src/constants/app_styles.dart';
 import 'package:settee/src/screen/home/map.dart';
 
@@ -10,7 +12,6 @@ class CongratulationScreen extends StatefulWidget {
 }
 
 class _CongratulationScreenState extends State<CongratulationScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -42,27 +43,31 @@ class _CongratulationScreenState extends State<CongratulationScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
-      onWillPop: _onWillPop, 
-        child: Scaffold(
+      onWillPop: _onWillPop,
+      child: Scaffold(
         backgroundColor: kColorBlack,
-        body: SafeArea(
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/background/success.png'),
+              fit: BoxFit.contain, // or BoxFit.contain
+              alignment: Alignment.center,
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/images/background/success.png',
-                  fit: BoxFit.cover,
-                ),
+                SizedBox(height: vhh(context, 10)),
+                ProgressContainer(current: 6, total: 6),
+                SizedBox(height: vhh(context, 2)),
+                // Rest of your content...
               ],
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }

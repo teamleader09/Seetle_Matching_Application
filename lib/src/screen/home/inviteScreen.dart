@@ -6,14 +6,14 @@ import 'package:settee/src/utils/index.dart';
 import 'package:settee/src/common/progressContainer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NameInputScreen extends StatefulWidget {
-  const NameInputScreen({super.key});
+class InviteScreen extends StatefulWidget {
+  const InviteScreen({super.key});
 
   @override
-  State<NameInputScreen> createState() => _NameInputScreenState();
+  State<InviteScreen> createState() => _InviteScreen();
 }
 
-class _NameInputScreenState extends State<NameInputScreen> {
+class _InviteScreen extends State<InviteScreen> {
   final nameController = TextEditingController();
 
   @override
@@ -55,9 +55,9 @@ class _NameInputScreenState extends State<NameInputScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: vhh(context, 1)),
+                  SizedBox(height: vhh(context, 5)),
                   const Text(
-                    beRealTitle,
+                    startWithFriend,
                     style: TextStyle(
                       color: kColorWhite,
                       fontSize: 22,
@@ -65,10 +65,6 @@ class _NameInputScreenState extends State<NameInputScreen> {
                     ),
                   ),
                   SizedBox(height: vhh(context, 2)),
-                  ProgressContainer(
-                    current: 1,
-                    total: 6,
-                  ),
                   SizedBox(height: vhh(context, 2)),
                   const Text(
                     inputName,
