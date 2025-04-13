@@ -3,7 +3,8 @@ import 'package:settee/src/constants/app_styles.dart';
 import 'package:settee/src/screen/auth/chooseBirthday.dart';
 import 'package:settee/src/translate/jp.dart';
 import 'package:settee/src/utils/index.dart';
-import 'package:settee/src/common/progressContainer.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:settee/src/utils/generateQRCode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InviteScreen extends StatefulWidget {
@@ -15,6 +16,20 @@ class InviteScreen extends StatefulWidget {
 
 class _InviteScreen extends State<InviteScreen> {
   final nameController = TextEditingController();
+  String _qrData = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final data = await DeviceQRGenerator.generateDeviceData();
+    setState(() {
+      _qrData = data;
+    });
+  }
 
   @override
   void dispose() {
@@ -65,69 +80,56 @@ class _InviteScreen extends State<InviteScreen> {
                     ),
                   ),
                   SizedBox(height: vhh(context, 2)),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              Colors.purple,
+                              Colors.blue,
+                            ],
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(height: vhh(context, 15)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/images/background/logo.png',
+                                    width: 50, height: 50),
+                                SizedBox(width: vhh(context, 1)),
+                                Image.asset(
+                                    'assets/images/background/splash_title.png',
+                                    width: 172,
+                                    height: 40),
+                              ],
+                            ),
+                            SizedBox(height: vhh(context, 2)),
+                            QrImageView(
+                              data: _qrData,
+                              size: 150,
+                              backgroundColor: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(height: vhh(context, 2)),
                   const Text(
-                    inputName,
+                    sendToFriend,
                     style: TextStyle(
                       color: kColorWhite,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: vhh(context, 2)),
-                  SizedBox(
-                    height: vhh(context, 6),
-                    child: TextField(
-                      controller: nameController,
-                      style: const TextStyle(color: kColorWhite, fontSize: 14),
-                      textAlign: TextAlign.center,
-                      keyboardAppearance: Brightness.light,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        hintText: inputNamePls,
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                        border: InputBorder.none,
-                        // enabledBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.all(Radius.circular(15)),
-                        //   borderSide: BorderSide(color: kColorWhite),
-                        // ),
-                        // focusedBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.all(Radius.circular(15)),
-                        //   borderSide: BorderSide(color: kColorWhite, width: 1),
-                        // ),
-                      ),
-                      onChanged: (_) => setState(() {}),
-                    ),
-                  ),
-                  SizedBox(height: vhh(context, 3)),
-                  const Text(
-                    nameExample,
-                    style: TextStyle(color: kColorLightGray),
-                    textAlign: TextAlign.center,
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: isButtonEnabled ? _handleNext : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kColorWhite,
-                        disabledBackgroundColor: kColorWhite.withOpacity(0.5),
-                        foregroundColor: kColorBlack,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        continueTitle,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: vhh(context, 3)),
                 ],
               ),
             ),
